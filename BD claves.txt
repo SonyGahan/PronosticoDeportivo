@@ -1,0 +1,4 @@
+Base de DAtos workbrench: pronosticos_deportivos
+
+Usuario: pronosticos_user
+password: User1234
