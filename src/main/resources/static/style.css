@@ -1,0 +1,51 @@
+/* Cambiar el color de fondo de la página */
+body.bg-secondary {
+  background-color: #d3d3d3; /* Gris claro */
+}
+
+/* Cambiar el color de los encabezados h1 */
+h1 {
+  text-align: center;
+}
+
+/* Cambiar el color de los encabezados h2 */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+/* Cambiar el color de las cabeceras de las tablas */
+th {
+  color: white;
+}
+
+/* Cambiar el color de fondo de las filas de las tablas */
+table tbody tr:nth-child(odd) {
+  background-color: #FDF0D5; /* Cremita */
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #FDF0D5; /* Cremita */
+}
+
+/* Cambiar el color de fondo de las filas de la tabla de Equipos */
+.table-bordered td, .table-bordered th {
+  border: 1px solid #FDF0D5;
+}
+
+.table-bordered th {
+  background-color: #1292d9; /* Celeste */
+  color: white;
+}
+
+.table-bordered td {
+  background-color: #f9e9e9; /* Menta */
+}
+
+/* Asegurar que las cabeceras con bg-primary se sobreescriban */
+th.bg-primary, td.bg-primary {
+  background-color: #780000 !important; /* Rojo Oscuro */
+  color: white;
+}
+

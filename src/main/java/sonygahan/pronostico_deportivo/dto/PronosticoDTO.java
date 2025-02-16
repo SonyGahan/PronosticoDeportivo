@@ -2,37 +2,37 @@ package sonygahan.pronostico_deportivo.dto;
 
 public class PronosticoDTO {
     private Long id;
-    private PartidoDTO partido;
     private String resultadoPronosticado;
+    private String participanteNombre;  // Se añade el nombre del participante
+    private String equipo1Nombre;  // Se añade el nombre del primer equipo
+    private String equipo2Nombre;  // Se añade el nombre del segundo equipo
 
-    public PronosticoDTO(Long id, PartidoDTO partido, String resultadoPronosticado) {
+    public PronosticoDTO(Long id, String resultadoPronosticado, String participanteNombre, String equipo1Nombre, String equipo2Nombre) {
         this.id = id;
-        this.partido = partido;
         this.resultadoPronosticado = resultadoPronosticado;
+        this.participanteNombre = participanteNombre;
+        this.equipo1Nombre = equipo1Nombre;
+        this.equipo2Nombre = equipo2Nombre;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public PartidoDTO getPartido() {
-        return partido;
-    }
-
-    public void setPartido(PartidoDTO partido) {
-        this.partido = partido;
-    }
-
     public String getResultadoPronosticado() {
         return resultadoPronosticado;
     }
 
-    public void setResultadoPronosticado(String resultadoPronosticado) {
-        this.resultadoPronosticado = resultadoPronosticado;
+    public String getParticipanteNombre() {
+        return participanteNombre;
+    }
+
+    public String getEquipo1Nombre() {
+        return equipo1Nombre;
+    }
+
+    public String getEquipo2Nombre() {
+        return equipo2Nombre;
     }
 }
 

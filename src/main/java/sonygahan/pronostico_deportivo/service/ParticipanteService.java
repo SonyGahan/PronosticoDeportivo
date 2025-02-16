@@ -8,6 +8,7 @@ import sonygahan.pronostico_deportivo.repository.ParticipanteRepository;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,47 +20,72 @@ public class ParticipanteService {
         this.participanteRepository = participanteRepository;
     }
 
+    // 🔹 Listar participantes con DTOs, manejando posibles valores nulos
     public List<ParticipanteDTO> listarParticipantes() {
         return participanteRepository.findAll().stream()
                 .map(participante -> new ParticipanteDTO(
                         participante.getId(),
                         participante.getNombre(),
                         participante.getPuntaje(),
-                        participante.getPronosticos().stream()
+                        participante.getPronosticos() != null ? participante.getPronosticos().stream()
                                 .map(pronostico -> new PronosticoDTO(
                                         pronostico.getId(),
-                                        null, // Podemos dejar el partido como null si no es necesario aquí
+                                        pronostico.getParticipante().getNombre(),
+                                        pronostico.getPartido().getEquipo1().getNombre(),
+                                        pronostico.getPartido().getEquipo2().getNombre(),
                                         pronostico.getResultadoPronosticado()
                                 ))
-                                .collect(Collectors.toList())
+                                .collect(Collectors.toList()) : List.of() // ✅ Evita `NullPointerException`
                 ))
                 .collect(Collectors.toList());
     }
 
+    // 🔹 Crear un nuevo participante con puntaje inicializado
     public ParticipanteDTO crearParticipante(@Valid Participante participante) {
+        if (participante.getPuntaje() == 0) { // ✅ Ya es 0 por defecto, pero aseguramos
+            participante.setPuntaje(0);
+        }
+
         Participante participanteGuardado = participanteRepository.save(participante);
+
         return new ParticipanteDTO(
                 participanteGuardado.getId(),
                 participanteGuardado.getNombre(),
                 participanteGuardado.getPuntaje(),
-                null
+                List.of() // No devolvemos pronósticos en la creación
         );
     }
 
+    // 🔹 Actualizar un participante existente con validación
     public ParticipanteDTO actualizarParticipante(Long id, @Valid Participante participante) {
-        participante.setId(id);
-        Participante participanteActualizado = participanteRepository.save(participante);
-        return new ParticipanteDTO(
-                participanteActualizado.getId(),
-                participanteActualizado.getNombre(),
-                participanteActualizado.getPuntaje(),
-                null
-        );
+        Optional<Participante> participanteExistente = participanteRepository.findById(id);
+
+        if (participanteExistente.isPresent()) {
+            Participante participanteActualizado = participanteExistente.get();
+            participanteActualizado.setNombre(participante.getNombre());
+            participanteActualizado.setPuntaje(participante.getPuntaje());
+
+            participanteRepository.save(participanteActualizado);
+
+            return new ParticipanteDTO(
+                    participanteActualizado.getId(),
+                    participanteActualizado.getNombre(),
+                    participanteActualizado.getPuntaje(),
+                    List.of() // No devolvemos pronósticos aquí
+            );
+        } else {
+            throw new IllegalArgumentException("No se encontró el participante con ID: " + id);
+        }
     }
 
+    // 🔹 Eliminar participante con verificación previa
     public void eliminarParticipante(Long id) {
+        if (!participanteRepository.existsById(id)) {
+            throw new IllegalArgumentException("No se encontró el participante con ID: " + id);
+        }
         participanteRepository.deleteById(id);
     }
 }
+
 
 

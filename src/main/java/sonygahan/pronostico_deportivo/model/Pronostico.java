@@ -3,6 +3,8 @@ package sonygahan.pronostico_deportivo.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "pronosticos", uniqueConstraints = {
@@ -19,9 +21,10 @@ public class Pronostico {
     @NotNull(message = "El participante no puede ser nulo")
     private Participante participante;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "partido_id", nullable = false)
     @NotNull(message = "El partido no puede ser nulo")
+    @OnDelete(action = OnDeleteAction.NO_ACTION) // ❌ Evita que Hibernate elimine los pronósticos
     private Partido partido;
 
     @NotNull(message = "El resultado pronosticado no puede ser nulo")

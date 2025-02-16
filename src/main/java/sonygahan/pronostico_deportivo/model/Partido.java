@@ -16,12 +16,12 @@ public class Partido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST}) // ❌ Se quitó REMOVE
     @JoinColumn(name = "equipo1_id", nullable = false)
     @NotNull(message = "El equipo1 no puede ser nulo")
     private Equipo equipo1;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST}) // ❌ Se quitó REMOVE
     @JoinColumn(name = "equipo2_id", nullable = false)
     @NotNull(message = "El equipo2 no puede ser nulo")
     private Equipo equipo2;
@@ -31,7 +31,6 @@ public class Partido {
     @Column(nullable = false)
     private String resultado;
 
-    // Nueva relación con Pronostico
     @OneToMany(mappedBy = "partido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pronostico> pronosticos = new ArrayList<>();
 
@@ -77,6 +76,7 @@ public class Partido {
                 '}';
     }
 }
+
 
 
 

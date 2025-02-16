@@ -16,19 +16,23 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-@Service  // 🔹 Ahora esta clase es el único servicio de pronósticos
+@Service
 public class PronosticoService {
 
-    @Autowired
-    private PronosticoRepository pronosticoRepository;
+    private final PronosticoRepository pronosticoRepository;
+    private final ParticipanteRepository participanteRepository;
+    private final PartidoRepository partidoRepository;
 
     @Autowired
-    private ParticipanteRepository participanteRepository;
+    public PronosticoService(PronosticoRepository pronosticoRepository,
+                             ParticipanteRepository participanteRepository,
+                             PartidoRepository partidoRepository) {
+        this.pronosticoRepository = pronosticoRepository;
+        this.participanteRepository = participanteRepository;
+        this.partidoRepository = partidoRepository;
+    }
 
-    @Autowired
-    private PartidoRepository partidoRepository;
-
-    // 🔹 Carga de pronósticos iniciales, reemplaza a PronosticoDeportivo
+    // 🔹 Cargar pronósticos iniciales solo si no hay datos en la BD
     public void cargarPronosticos() {
         if (pronosticoRepository.count() > 0) return; // ✅ Evita duplicaciones
 
@@ -38,29 +42,41 @@ public class PronosticoService {
 
         for (Participante participante : participantes) {
             for (Partido partido : partidos) {
-                Pronostico pronostico = new Pronostico(participante, partido, rnd.nextBoolean() ? "G" : "P");
-                pronosticoRepository.save(pronostico); // 🔹 Se usa directamente el repositorio
+                String resultado = rnd.nextBoolean() ? "G" : "P"; // Generación aleatoria del resultado
+                Pronostico pronostico = new Pronostico(participante, partido, resultado);
+                pronosticoRepository.save(pronostico);
             }
         }
     }
 
-    // 🔹 Operación para listar todos los pronósticos con DTOs
+    // 🔹 Listar todos los pronósticos como DTOs para la interfaz
     public List<PronosticoDTO> listarPronosticos() {
         return pronosticoRepository.findAll().stream()
                 .map(pronostico -> new PronosticoDTO(
                         pronostico.getId(),
-                        null, // ⚠️ Se puede completar con el DTO del partido si es necesario
+                        pronostico.getParticipante().getNombre(),
+                        pronostico.getPartido().getEquipo1().getNombre(),
+                        pronostico.getPartido().getEquipo2().getNombre(),
                         pronostico.getResultadoPronosticado()))
                 .collect(Collectors.toList());
     }
 
-    // 🔹 Método para crear un nuevo pronóstico
+    // 🔹 Crear un nuevo pronóstico con validación
     public PronosticoDTO crearPronostico(@Valid Pronostico pronostico) {
+        if (pronostico.getParticipante() == null || pronostico.getPartido() == null) {
+            throw new IllegalArgumentException("El participante y el partido no pueden ser nulos.");
+        }
+
         Pronostico pronosticoGuardado = pronosticoRepository.save(pronostico);
-        return new PronosticoDTO(pronosticoGuardado.getId(), null, pronosticoGuardado.getResultadoPronosticado());
+        return new PronosticoDTO(
+                pronosticoGuardado.getId(),
+                pronosticoGuardado.getParticipante().getNombre(),
+                pronosticoGuardado.getPartido().getEquipo1().getNombre(),
+                pronosticoGuardado.getPartido().getEquipo2().getNombre(),
+                pronosticoGuardado.getResultadoPronosticado());
     }
 
-    // 🔹 Método para actualizar un pronóstico existente
+    // 🔹 Actualizar un pronóstico existente
     public PronosticoDTO actualizarPronostico(Long id, @Valid Pronostico pronostico) {
         Optional<Pronostico> pronosticoExistente = pronosticoRepository.findById(id);
 
@@ -68,22 +84,32 @@ public class PronosticoService {
             Pronostico pronosticoActualizado = pronosticoExistente.get();
             pronosticoActualizado.setResultadoPronosticado(pronostico.getResultadoPronosticado());
             pronosticoRepository.save(pronosticoActualizado);
-            return new PronosticoDTO(pronosticoActualizado.getId(), null, pronosticoActualizado.getResultadoPronosticado());
+
+            return new PronosticoDTO(
+                    pronosticoActualizado.getId(),
+                    pronosticoActualizado.getParticipante().getNombre(),
+                    pronosticoActualizado.getPartido().getEquipo1().getNombre(),
+                    pronosticoActualizado.getPartido().getEquipo2().getNombre(),
+                    pronosticoActualizado.getResultadoPronosticado());
         } else {
             throw new IllegalArgumentException("No se encontró el pronóstico con ID: " + id);
         }
     }
 
-    // 🔹 Método para eliminar un pronóstico por ID
+    // 🔹 Eliminar un pronóstico por ID con control de existencia
     public void eliminarPronostico(Long id) {
+        if (!pronosticoRepository.existsById(id)) {
+            throw new IllegalArgumentException("No se encontró el pronóstico con ID: " + id);
+        }
         pronosticoRepository.deleteById(id);
     }
 
-    // 🔹 Método para contar los pronósticos existentes
+    // 🔹 Contar cuántos pronósticos existen en la base de datos
     public long contarPronosticos() {
         return pronosticoRepository.count();
     }
 }
+
 
 
 

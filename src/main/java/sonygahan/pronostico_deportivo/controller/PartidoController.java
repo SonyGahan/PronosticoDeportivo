@@ -9,6 +9,7 @@ import sonygahan.pronostico_deportivo.service.PartidoService;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/partidos")
@@ -27,15 +28,27 @@ public class PartidoController {
     }
 
     @PostMapping
-    public ResponseEntity<PartidoDTO> crearPartido(@Valid @RequestBody Partido partido) {
-        return ResponseEntity.ok(partidoService.crearPartido(partido));
+    public ResponseEntity<PartidoDTO> crearPartido(@RequestBody Map<String, Object> datos) {
+        Long equipo1Id = ((Number) datos.get("equipo1Id")).longValue();
+        Long equipo2Id = ((Number) datos.get("equipo2Id")).longValue();
+        String resultado = (String) datos.get("resultado");
+
+        return ResponseEntity.ok(partidoService.crearPartido(equipo1Id, equipo2Id, resultado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PartidoDTO> actualizarPartido(
+    public ResponseEntity<?> actualizarPartido(
             @PathVariable Long id,
-            @Valid @RequestBody Partido partido) {
-        return ResponseEntity.ok(partidoService.actualizarPartido(id, partido));
+            @RequestBody Map<String, Object> datos) {
+        try {
+            Long equipo1Id = ((Number) datos.get("equipo1Id")).longValue();
+            Long equipo2Id = ((Number) datos.get("equipo2Id")).longValue();
+            String resultado = (String) datos.get("resultado");
+
+            return ResponseEntity.ok(partidoService.actualizarPartido(id, equipo1Id, equipo2Id, resultado));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")

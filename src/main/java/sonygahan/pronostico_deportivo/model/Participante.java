@@ -51,6 +51,11 @@ public class Participante {
         return puntaje;
     }
 
+    public void setPuntaje(int puntaje) {
+        this.puntaje = puntaje;
+    }
+
+
     public void sumarPuntos(int puntos) {
         this.puntaje += puntos;
     }
