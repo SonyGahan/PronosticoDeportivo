@@ -52,7 +52,7 @@
 
 A continuación te mostramos cómo se ve la aplicación:
 
-![Vista Principal](imagen/interfaz.PNG)
+![Vista Principal](imagen/interfaz.png)
 
 ---
 
