@@ -6,6 +6,7 @@ public class PartidoDTO {
     private EquipoDTO equipo2;
     private String resultado;
 
+    // 📌 Constructor
     public PartidoDTO(Long id, EquipoDTO equipo1, EquipoDTO equipo2, String resultado) {
         this.id = id;
         this.equipo1 = equipo1;
@@ -13,6 +14,7 @@ public class PartidoDTO {
         this.resultado = resultado;
     }
 
+    // 📌Getters and Setters
     public Long getId() {
         return id;
     }

@@ -19,16 +19,18 @@ public class PartidoService {
 
     private final PartidoRepository partidoRepository;
     private final EquipoRepository equipoRepository;
-    private final PronosticoRepository pronosticoRepository; // ✅ Agregado
+    private final PronosticoRepository pronosticoRepository;
 
+    //📌Constructor
     public PartidoService(PartidoRepository partidoRepository,
                           EquipoRepository equipoRepository,
                           PronosticoRepository pronosticoRepository) {
         this.partidoRepository = partidoRepository;
         this.equipoRepository = equipoRepository;
-        this.pronosticoRepository = pronosticoRepository; // ✅ Agregado
+        this.pronosticoRepository = pronosticoRepository;
     }
 
+    // 🔹 Método para listar partidos
     public List<PartidoDTO> listarPartidos() {
         return partidoRepository.findAll().stream()
                 .map(partido -> new PartidoDTO(
@@ -40,6 +42,7 @@ public class PartidoService {
                 .collect(Collectors.toList());
     }
 
+    // 🔹 Método para crear partidos
     public PartidoDTO crearPartido(Long equipo1Id, Long equipo2Id, @Valid String resultado) {
         Equipo equipo1 = equipoRepository.findById(equipo1Id)
                 .orElseThrow(() -> new IllegalArgumentException("⚠️ Equipo 1 no encontrado"));
@@ -57,6 +60,7 @@ public class PartidoService {
         );
     }
 
+    // 🔹 Método para actualizar partidos por ID
     public PartidoDTO actualizarPartido(Long id, Long equipo1Id, Long equipo2Id, @Valid String resultado) {
         Partido partido = partidoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("⚠️ Partido con ID " + id + " no encontrado"));
@@ -80,15 +84,16 @@ public class PartidoService {
         );
     }
 
-    @Transactional // ✅ Agregamos transacción para evitar errores de Hibernate
+    // 🔹 Método para borrar partidos por ID
+    @Transactional // 📌 Agregamos transactional para evitar errores de Hibernate
     public void eliminarPartido(Long id) {
         Partido partido = partidoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("⚠️ Partido no encontrado"));
 
-        // Primero eliminamos los pronósticos asociados
+        // ✔️Primero eliminamos los pronósticos asociados
         pronosticoRepository.deleteByPartidoId(id);
 
-        // Luego eliminamos el partido
+        // ✔️Luego eliminamos el partido
         partidoRepository.delete(partido);
     }
 

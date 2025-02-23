@@ -7,6 +7,7 @@ public class PronosticoDTO {
     private String equipo1Nombre;  // Se añade el nombre del primer equipo
     private String equipo2Nombre;  // Se añade el nombre del segundo equipo
 
+    // 📌 Constructor
     public PronosticoDTO(Long id, String resultadoPronosticado, String participanteNombre, String equipo1Nombre, String equipo2Nombre) {
         this.id = id;
         this.resultadoPronosticado = resultadoPronosticado;
@@ -15,6 +16,7 @@ public class PronosticoDTO {
         this.equipo2Nombre = equipo2Nombre;
     }
 
+    // 📌Getters and Setters
     public Long getId() {
         return id;
     }

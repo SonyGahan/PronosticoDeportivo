@@ -16,12 +16,12 @@ public class Partido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST}) // ❌ Se quitó REMOVE
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "equipo1_id", nullable = false)
     @NotNull(message = "El equipo1 no puede ser nulo")
     private Equipo equipo1;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST}) // ❌ Se quitó REMOVE
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "equipo2_id", nullable = false)
     @NotNull(message = "El equipo2 no puede ser nulo")
     private Equipo equipo2;
@@ -34,6 +34,8 @@ public class Partido {
     @OneToMany(mappedBy = "partido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pronostico> pronosticos = new ArrayList<>();
 
+
+    // 📌Constructores
     public Partido() {}
 
     public Partido(Equipo equipo1, Equipo equipo2, String resultado) {
@@ -51,6 +53,8 @@ public class Partido {
         this.resultado = resultado;
     }
 
+
+    // 📌Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -66,6 +70,8 @@ public class Partido {
     public List<Pronostico> getPronosticos() { return pronosticos; }
     public void setPronosticos(List<Pronostico> pronosticos) { this.pronosticos = pronosticos; }
 
+
+    // 📌Metodo toString
     @Override
     public String toString() {
         return "Partido{" +

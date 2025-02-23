@@ -24,6 +24,8 @@ public class Participante {
     @OneToMany(mappedBy = "participante", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Pronostico> pronosticos;
 
+
+    // 📌Constructor
     public Participante() {}
 
     public Participante(String nombre) {
@@ -31,6 +33,8 @@ public class Participante {
         this.puntaje = 0;
     }
 
+
+    // 📌Getters and Setters
     public Long getId() {
         return id;
     }
@@ -68,6 +72,7 @@ public class Participante {
         this.pronosticos = pronosticos;
     }
 
+    // 📌Metodo toString
     @Override
     public String toString() {
         return "Participante{" +

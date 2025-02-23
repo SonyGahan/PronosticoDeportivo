@@ -17,15 +17,18 @@ public class EquipoController {
 
     private final EquipoService equipoService;
 
+    // 📌 Constructor
     public EquipoController(EquipoService equipoService) {
         this.equipoService = equipoService;
     }
 
+    // 🟢 Método para listar equipos
     @GetMapping
     public List<EquipoDTO> listarEquipos() {
         return equipoService.listarEquipos();
     }
 
+    // 🟢 Método para crear equipos
     @PostMapping
     public ResponseEntity<?> crearEquipo(@Valid @RequestBody Equipo equipo) {
         try {
@@ -35,6 +38,7 @@ public class EquipoController {
         }
     }
 
+    // 🟢 Método para actualizar equipos por ID
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarEquipo(
             @PathVariable Long id,
@@ -42,12 +46,13 @@ public class EquipoController {
         try {
             return ResponseEntity.ok(equipoService.actualizarEquipo(id, equipo));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage()); // Devuelve un mensaje de error en JSON
+            return ResponseEntity.badRequest().body(e.getMessage()); //Devuelve un mensaje de error en JSON
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Error inesperado: " + e.getMessage());
         }
     }
 
+    // 🟢 Método para borrar equipos por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarEquipo(@PathVariable Long id) {
         equipoService.eliminarEquipo(id);

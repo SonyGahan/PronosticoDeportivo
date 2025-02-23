@@ -23,6 +23,7 @@ public class PronosticoService {
     private final ParticipanteRepository participanteRepository;
     private final PartidoRepository partidoRepository;
 
+    // 📌 Constructor
     @Autowired
     public PronosticoService(PronosticoRepository pronosticoRepository,
                              ParticipanteRepository participanteRepository,

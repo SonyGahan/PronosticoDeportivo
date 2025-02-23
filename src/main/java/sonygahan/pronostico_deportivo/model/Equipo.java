@@ -17,12 +17,14 @@ public class Equipo {
 
     private String descripcion;
 
-    @OneToMany(mappedBy = "equipo1", cascade = CascadeType.ALL, orphanRemoval = false) // ✅ No se eliminan partidos
+    @OneToMany(mappedBy = "equipo1", cascade = CascadeType.ALL, orphanRemoval = false) //No se eliminan partidos
     private List<Partido> partidosComoLocal = new ArrayList<>();
 
-    @OneToMany(mappedBy = "equipo2", cascade = CascadeType.ALL, orphanRemoval = false) // ✅ No se eliminan partidos
+    @OneToMany(mappedBy = "equipo2", cascade = CascadeType.ALL, orphanRemoval = false) //No se eliminan partidos
     private List<Partido> partidosComoVisitante = new ArrayList<>();
 
+
+    // 📌Constructor
     public Equipo() {}
 
     public Equipo(String nombre, String descripcion) {
@@ -33,6 +35,8 @@ public class Equipo {
         this.descripcion = descripcion;
     }
 
+
+    // 📌Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -42,6 +46,8 @@ public class Equipo {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
+
+    // 📌Metodo ToString
     @Override
     public String toString() {
         return "Equipo{" +

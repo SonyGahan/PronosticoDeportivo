@@ -32,6 +32,8 @@ public class Pronostico {
     @Column(nullable = false)
     private String resultadoPronosticado;
 
+
+    // 📌Constructor
     public Pronostico() {}
 
     public Pronostico(Participante participante, Partido partido, String resultadoPronosticado) {
@@ -46,6 +48,7 @@ public class Pronostico {
         this.resultadoPronosticado = resultadoPronosticado;
     }
 
+    // 📌Getters and Setters
     public Long getId() {
         return id;
     }
@@ -78,6 +81,8 @@ public class Pronostico {
         this.resultadoPronosticado = resultadoPronosticado;
     }
 
+
+    // 📌Metodo toString
     @Override
     public String toString() {
         return "Pronostico{" +

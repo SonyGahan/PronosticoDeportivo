@@ -14,11 +14,13 @@ public class DatabaseController {
 
     private final DatabaseService databaseService;
 
+    // 📌 Constructor
     @Autowired
     public DatabaseController(DatabaseService databaseService) {
         this.databaseService = databaseService;
     }
 
+    // 🟢 Método para verificar la conexion a la BD
     @GetMapping("/status")
     public String verificarConexion() {
         return databaseService.verificarConexion() ? "Conexión exitosa" : "Error en la conexión";

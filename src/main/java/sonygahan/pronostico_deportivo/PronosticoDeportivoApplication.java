@@ -10,17 +10,19 @@ public class PronosticoDeportivoApplication implements CommandLineRunner {
 
 	private final PronosticoService pronosticoService;
 
+	// 📌 Constructor
 	public PronosticoDeportivoApplication(PronosticoService pronosticoService) {
 		this.pronosticoService = pronosticoService;
 	}
 
+	// 💠 Aplicacion principal de Pronóstico Deportivo
 	public static void main(String[] args) {
 		SpringApplication.run(PronosticoDeportivoApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) {
-		System.out.println("=== Cargando Pronósticos Iniciales ===");
+		System.out.println("⏳ Cargando Pronósticos Iniciales...");
 		pronosticoService.cargarPronosticos();
 		System.out.println("✅ Pronósticos cargados exitosamente.");
 	}

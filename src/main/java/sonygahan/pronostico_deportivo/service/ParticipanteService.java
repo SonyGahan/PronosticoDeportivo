@@ -5,7 +5,6 @@ import sonygahan.pronostico_deportivo.dto.ParticipanteDTO;
 import sonygahan.pronostico_deportivo.dto.PronosticoDTO;
 import sonygahan.pronostico_deportivo.model.Participante;
 import sonygahan.pronostico_deportivo.repository.ParticipanteRepository;
-
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -16,11 +15,12 @@ public class ParticipanteService {
 
     private final ParticipanteRepository participanteRepository;
 
+    // 📌 Constructor
     public ParticipanteService(ParticipanteRepository participanteRepository) {
         this.participanteRepository = participanteRepository;
     }
 
-    // 🔹 Listar participantes con DTOs, manejando posibles valores nulos
+    // 🔹 Lista participantes con DTOs, manejando posibles valores nulos
     public List<ParticipanteDTO> listarParticipantes() {
         return participanteRepository.findAll().stream()
                 .map(participante -> new ParticipanteDTO(
@@ -40,9 +40,9 @@ public class ParticipanteService {
                 .collect(Collectors.toList());
     }
 
-    // 🔹 Crear un nuevo participante con puntaje inicializado
+    // 🔹 Crea un nuevo participante con puntaje inicializado
     public ParticipanteDTO crearParticipante(@Valid Participante participante) {
-        if (participante.getPuntaje() == 0) { // ✅ Ya es 0 por defecto, pero aseguramos
+        if (participante.getPuntaje() == 0) { // ✅ Ya es 0 por defecto, pero nos aseguramos
             participante.setPuntaje(0);
         }
 
@@ -52,11 +52,11 @@ public class ParticipanteService {
                 participanteGuardado.getId(),
                 participanteGuardado.getNombre(),
                 participanteGuardado.getPuntaje(),
-                List.of() // No devolvemos pronósticos en la creación
+                List.of() // ❌ No devolvemos pronósticos en la creación
         );
     }
 
-    // 🔹 Actualizar un participante existente con validación
+    // 🔹 Actualiza un participante existente con validación
     public ParticipanteDTO actualizarParticipante(Long id, @Valid Participante participante) {
         Optional<Participante> participanteExistente = participanteRepository.findById(id);
 
@@ -71,14 +71,14 @@ public class ParticipanteService {
                     participanteActualizado.getId(),
                     participanteActualizado.getNombre(),
                     participanteActualizado.getPuntaje(),
-                    List.of() // No devolvemos pronósticos aquí
+                    List.of() // ❌ No devolvemos pronósticos aquí
             );
         } else {
             throw new IllegalArgumentException("No se encontró el participante con ID: " + id);
         }
     }
 
-    // 🔹 Eliminar participante con verificación previa
+    // 🔹 Elimina un participante con verificación previa
     public void eliminarParticipante(Long id) {
         if (!participanteRepository.existsById(id)) {
             throw new IllegalArgumentException("No se encontró el participante con ID: " + id);

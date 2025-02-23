@@ -8,6 +8,7 @@ public class ParticipanteDTO {
     private int puntaje;
     private List<PronosticoDTO> pronosticos;
 
+    // 📌 Constructor
     public ParticipanteDTO(Long id, String nombre, int puntaje, List<PronosticoDTO> pronosticos) {
         this.id = id;
         this.nombre = nombre;
@@ -15,6 +16,7 @@ public class ParticipanteDTO {
         this.pronosticos = pronosticos;
     }
 
+    // 📌Getters and Setters
     public Long getId() {
         return id;
     }

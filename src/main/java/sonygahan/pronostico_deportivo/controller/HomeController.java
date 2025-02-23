@@ -16,6 +16,7 @@ public class HomeController {
     private final ParticipanteService participanteService;
     private final PronosticoService pronosticoService;
 
+    // 📌 Constructor
     public HomeController(EquipoService equipoService, PartidoService partidoService,
                           ParticipanteService participanteService, PronosticoService pronosticoService) {
         this.equipoService = equipoService;
@@ -24,6 +25,7 @@ public class HomeController {
         this.pronosticoService = pronosticoService;
     }
 
+    // 🟢 Método para mostrar los datos en la interfaz
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("equipos", equipoService.listarEquipos());
